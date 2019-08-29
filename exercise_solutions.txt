@@ -1,0 +1,133 @@
+
+You are building an online learning platform (much like this!). You’ve got many different courses, each with a title and description, and each course has multiple lessons. Lesson content consists of a title and body text.
+
+Courses
+1. title: string [unique, 50 chars, present]
+2. description: text [present]
+3. id: integrer
+4. created_at: datetime
+5. updated_at: datetime
+6. has_many lessons
+
+Lessons
+1. title: string [unique, 50 chars, present]
+2. body: text
+3. course_id: integer
+4. id: integrer
+5. created_at: datetime
+6. updated_at: datetime
+7. belongs_to course
+
+You are building the profile tab for a new user on your site. You are already storing your user’s username and email, but now you want to collect demographic information like city, state, country, age and gender. Think – how many profiles should a user have? How would you relate this to the User model?
+
+Users - Option 1
+1. username: string [unique, 50 chars, present]
+2. email:  string [unique, 50 chars, present]
+3. city: string [required]
+4. state: string [required]
+5. country: string [required]
+6. age: string [required]
+7. gender: string [required]
+8. id: integer
+9. created_at: datetime
+10. updated_at: datetime
+
+Users - Option 2
+1. username: string [unique, 50 chars, present]
+2. email:  string [unique, 50 chars, present]
+3. id: integer
+4. created_at: datetime
+5. updated_at: datetime
+6. has_one demographic
+Demographics
+1. city: string [required]
+2. state: string [required]
+3. country: string [required]
+4. age: string [required]
+5. gender: string [required]
+6. belongs_to user
+7. user_id: integer
+8. id: integer
+9. created_at: datetime
+10. updated_at: datetime
+
+Users - Option 3
+1. username: string [unique, 50 chars, present]
+2. email:  string [unique, 50 chars, present]
+3. id: integer
+4. created_at: datetime
+5. updated_at: datetime
+6. has_one address
+7. has_one personalInfo
+Addresses
+1. city: string [required]
+2. state: string [required]
+3. country: string [required]
+4. user_id: integer
+5. belongs_to user
+6. id: integer
+7. created_at: datetime
+8. updated_at: datetime
+PersonalInfos
+1. age: string [required]
+2. gender: string [required]
+3. user_id: integer
+4. belongs_to user
+5. id: integer
+6. created_at: datetime
+7. updated_at: datetime
+
+You want to build a virtual pinboard, so you’ll have users on your platform who can create “pins”. Each pin will contain the URL to an image on the web. Users can comment on pins (but can’t comment on comments).
+
+Users and Pins will have a many to many relationship through comments
+
+Users
+1. username: string [unique, 50 chars, present]
+2. email:  string [unique, 50 chars, present]
+3. id: integer
+4. created_at: datetime
+5. updated_at: datetime
+6. has_many pins
+7. has_many comments
+
+Pins
+1. imageUrl: string [required]
+2. id: integer
+3. created_at: datetime
+4. updated_at: datetime
+5. belongs_to user
+6. has_many comments
+
+comments
+1. id: integer
+2. body: text [required]
+3. user_id: integer
+4. pin_id: integer 
+5. created_at: datetime
+6. updated_at: datetime
+
+You want to build a message board like Hacker News. Users can post links. Other users can comment on these submissions or comment on the comments. How would you make sure a comment knows where in the hierarchy it lives?
+
+Users
+1. username: string [unique, 50 chars, present]
+2. email:  string [unique, 50 chars, present]
+3. id: integer
+4. created_at: datetime
+5. updated_at: datetime
+6. has_many links
+
+Links
+1. id: integer
+2. linkText: text [required]
+3. created_at: datetime
+4. updated_at: datetime
+5. belongs_to user
+6. has_many comments
+
+Comments
+1. id: integer
+2. commentText: text [required]
+3. created_at: datetime
+4. updated_at: datetime
+5. belongs_to links
+6. has_one user

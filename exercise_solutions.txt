@@ -23,28 +23,30 @@ You are building the profile tab for a new user on your site. You are already st
 Users - Option 1
 1. username: string [unique, 50 chars, present]
 2. email:  string [unique, 50 chars, present]
-3. city: string [required]
-4. state: string [required]
-5. country: string [required]
-6. age: string [required]
-7. gender: string [required]
-8. id: integer
-9. created_at: datetime
-10. updated_at: datetime
+3. password [12-20 chars, present]
+4. city: string [required]
+5. state: string [required]
+6. country: string [required]
+7. age: string [required]
+8. gender: string [required]
+9. id: integer
+10. created_at: datetime
+11. updated_at: datetime
 
 Users - Option 2
 1. username: string [unique, 50 chars, present]
 2. email:  string [unique, 50 chars, present]
-3. id: integer
-4. created_at: datetime
-5. updated_at: datetime
-6. has_one demographic
-Demographics
-1. city: string [required]
-2. state: string [required]
-3. country: string [required]
-4. age: string [required]
-5. gender: string [required]
+3. password [12-20 chars, present]
+4. id: integer
+5. created_at: datetime
+6. updated_at: datetime
+7. has_one profile
+Profiles
+1. city: string [present]
+2. state: string [present]
+3. country: string [present]
+4. age: string [present]
+5. gender: string [present]
 6. belongs_to user
 7. user_id: integer
 8. id: integer
@@ -54,23 +56,24 @@ Demographics
 Users - Option 3
 1. username: string [unique, 50 chars, present]
 2. email:  string [unique, 50 chars, present]
-3. id: integer
-4. created_at: datetime
-5. updated_at: datetime
-6. has_one address
-7. has_one personalInfo
+3. password [12-20 chars, present]
+4. id: integer
+5. created_at: datetime
+6. updated_at: datetime
+7. has_one address
+8. has_one personalInfo
 Addresses
-1. city: string [required]
-2. state: string [required]
-3. country: string [required]
+1. city: string [present]
+2. state: string [present]
+3. country: string [present]
 4. user_id: integer
 5. belongs_to user
 6. id: integer
 7. created_at: datetime
 8. updated_at: datetime
 PersonalInfos
-1. age: string [required]
-2. gender: string [required]
+1. age: string [present]
+2. gender: string [present]
 3. user_id: integer
 4. belongs_to user
 5. id: integer
@@ -84,11 +87,12 @@ Users and Pins will have a many to many relationship through comments
 Users
 1. username: string [unique, 50 chars, present]
 2. email:  string [unique, 50 chars, present]
-3. id: integer
-4. created_at: datetime
-5. updated_at: datetime
-6. has_many pins
-7. has_many comments
+3. password [12-20 chars, present]
+4. id: integer
+5. created_at: datetime
+6. updated_at: datetime
+7. has_many pins
+8. has_many comments
 
 Pins
 1. imageUrl: string [required]
@@ -98,36 +102,90 @@ Pins
 5. belongs_to user
 6. has_many comments
 
-comments
+Comments - (JOIN TABLE)
 1. id: integer
-2. body: text [required]
+2. body: text [present]
 3. user_id: integer
-4. pin_id: integer 
-5. created_at: datetime
-6. updated_at: datetime
+4. pin_id: integer
+5. belongs_to User
+6. belongs_to Pin
+7. created_at: datetime
+8. updated_at: datetime
 
 You want to build a message board like Hacker News. Users can post links. Other users can comment on these submissions or comment on the comments. How would you make sure a comment knows where in the hierarchy it lives?
 
+Users and Pins will have a many to many relationship through comments
+
+
+Option - 1
+
 Users
 1. username: string [unique, 50 chars, present]
-2. email:  string [unique, 50 chars, present]
-3. id: integer
-4. created_at: datetime
-5. updated_at: datetime
-6. has_many links
+2. password [12-20 chars, present]
+3. email:  string [unique, 50 chars, present]
+4. id: integer
+5. created_at: datetime
+6. updated_at: datetime
+7. has_many pins
+8. has_many comments
+9. has_many replies
 
-Links
-1. id: integer
-2. linkText: text [required]
+Pins
+1. imageUrl: string [required]
+2. id: integer
 3. created_at: datetime
 4. updated_at: datetime
 5. belongs_to user
 6. has_many comments
 
-Comments
+Comments - SELF JOIN
 1. id: integer
-2. commentText: text [required]
+2. body: text [present]
+3. user_id: integer
+4. pin_id: integer
+5. belongs_to User
+6. belongs_to Pin
+7. comment_id: integer
+
+
+Option - 2
+
+Users
+1. username: string [unique, 50 chars, present]
+2. password [12-20 chars, present]
+3. email:  string [unique, 50 chars, present]
+4. id: integer
+5. created_at: datetime
+6. updated_at: datetime
+7. has_many pins
+8. has_many comments
+9. has_many replies
+
+Pins
+1. imageUrl: string [required]
+2. id: integer
 3. created_at: datetime
 4. updated_at: datetime
-5. belongs_to links
-6. has_one user
+5. belongs_to user
+6. has_many comments
+
+Comments 
+1. id: integer
+2. body: text [present]
+3. user_id: integer
+4. pin_id: integer
+5. belongs_to User
+6. belongs_to Pin
+7. created_at: datetime
+8. updated_at: datetime
+9. has_many replies
+
+Replies 
+1. id: integer
+2. body: text [present]
+3. created_at: datetime
+4. updated_at: datetime
+5. user_id: integer
+6. comment_id: integer
+7. belongs_to user
+8. belongs_to comment
